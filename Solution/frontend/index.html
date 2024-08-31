@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Manager</title>
+  </head>
+  <body>
+    <h1>Account Manager</h1>
+    <form id="createAccountForm">
+      <label for="customerID">Customer ID:</label>
+      <input type="text" id="customerID" name="customerID" required />
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+      <label for="surname">SurName:</label>
+      <input type="text" id="surname" name="surname" required />
+
+      <button type="submit">Create Account</button>
+    </form>
+
+    <form id="addTransactionForm">
+      <label for="transID">Customer ID:</label>
+      <input type="text" id="transID" name="transID" required />
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" required />
+      <button type="submit">Add Transaction</button>
+    </form>
+
+    <div id="userInfoDiv"></div>
+    <div id="transactionsDiv"></div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
