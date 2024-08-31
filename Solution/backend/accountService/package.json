@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,8 @@
     "firebase": "^10.13.1"
   },
   "devDependencies": {
-    "chai": "^5.1.1",
-    "mocha": "^10.7.3"
+    "chai": "^4.3.6",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }
