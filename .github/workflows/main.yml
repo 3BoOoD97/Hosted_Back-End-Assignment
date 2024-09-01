@@ -28,12 +28,26 @@ jobs:
       - name: Install Dependencies
         run: npm install
         working-directory: Solution/backend/accountService
+      - name: Start Account Service
+        run: npm start &
+        working-directory: Solution/backend/accountService
       - name: Run Tests
         run: npm test
         working-directory: Solution/backend/accountService
 
   test-transaction-service:
     runs-on: ubuntu-latest
+    needs: test-account-service
+    env:
+      ACCOUNT_SERVICE_PORT: 3001
+      TRANSACTION_SERVICE_PORT: 3002
+    services:
+      transaction-service:
+        image: node:14
+        ports:
+          - 3002:3002
+        options: --health-cmd "curl --silent --fail http://localhost:3002/health" --health-interval 10s
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node.js
@@ -42,6 +56,9 @@ jobs:
           node-version: '14'
       - name: Install Dependencies
         run: npm install
+        working-directory: Solution/backend/transactionService
+      - name: Start Transaction Service
+        run: npm start &
         working-directory: Solution/backend/transactionService
       - name: Run Tests
         run: npm test
