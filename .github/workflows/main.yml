@@ -17,8 +17,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install --prefix Solution/accountService
-      - run: npm test --prefix Solution/accountService
+      - run: npm install --prefix Solution/backend/accountService
+      - run: npm test --prefix Solution/backend/accountService
 
   test-transaction-service:
     runs-on: ubuntu-latest
@@ -28,8 +28,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install --prefix Solution/transactionService
-      - run: npm test --prefix Solution/transactionService
+      - run: npm install --prefix Solution/backend/transactionService
+      - run: npm test --prefix Solution/backend/transactionService
 
   deploy-account-service:
     needs: test-account-service
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Deploy to Heroku AccountService
         run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/your-account-service-heroku-app-name.git HEAD:main
-        working-directory: Solution/accountService
+        working-directory: Solution/backend/accountService
 
   deploy-transaction-service:
     needs: test-transaction-service
@@ -47,4 +47,4 @@ jobs:
       - uses: actions/checkout@v2
       - name: Deploy to Heroku TransactionService
         run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/your-transaction-service-heroku-app-name.git HEAD:main
-        working-directory: Solution/transactionService
+        working-directory: Solution/backend/transactionService
