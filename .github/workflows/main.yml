@@ -9,108 +9,44 @@ on:
       - main
 
 jobs:
-  # Job for accountService
   test-account-service:
-    name: Test accountService
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v2
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: "18"
+          node-version: '14'
+      - run: npm install
+        working-directory: Solution/accountService
+      - run: npm test
+        working-directory: Solution/accountService
 
-      - name: Install dependencies
-        run: |
-          cd accountService
-          npm install
-
-      - name: Run tests
-        run: |
-          cd accountService
-          npm test
+  test-transaction-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install
+        working-directory: Solution/transactionService
+      - run: npm test
+        working-directory: Solution/transactionService
 
   deploy-account-service:
-    name: Deploy accountService to Heroku
-    runs-on: ubuntu-latest
     needs: test-account-service
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: |
-          cd accountService
-          npm install
-
-      - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: your-account-service-heroku-app-name
-        run: |
-          cd accountService
-          git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
-          git push heroku main
-
-  # Job for transactionService
-  test-transaction-service:
-    name: Test transactionService
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: |
-          cd transactionService
-          npm install
-
-      - name: Run tests
-        run: |
-          cd transactionService
-          npm test
+      - name: Deploy to Heroku AccountService
+        run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/your-account-service-heroku-app-name.git HEAD:main
+        working-directory: Solution/accountService
 
   deploy-transaction-service:
-    name: Deploy transactionService to Heroku
-    runs-on: ubuntu-latest
     needs: test-transaction-service
-    if: github.ref == 'refs/heads/main'
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: |
-          cd transactionService
-          npm install
-
-      - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: your-transaction-service-heroku-app-name
-        run: |
-          cd transactionService
-          git remote add heroku https://git.heroku.com/${{ env.HEROKU_APP_NAME }}.git
-          git push heroku main
+      - name: Deploy to Heroku TransactionService
+        run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/your-transaction-service-heroku-app-name.git HEAD:main
+        working-directory: Solution/transactionService
