@@ -11,7 +11,7 @@ class BankTransactionModel {
     // Create transaction method that takes customerID and amount as parameters
     static async createTransaction(customerID, amount) {
          // Check if the customer has an account
-         const accountResponse = await axios.get(`http://localhost:3001/account/getAccount/${customerID}`);
+         const accountResponse = await axios.get(`https://hosted-back-end-assignment-7.onrender.com/account/getAccount/${customerID}`);
          if (accountResponse.status !== 200) {
             console.error("No account found for the customer.");
              throw new Error('Account not found');
