@@ -21,31 +21,45 @@ searchTransactionForm.addEventListener('submit', (event) => {
   const customerID = document.getElementById('searchCustomerID').value;
 
   fetch(`https://transaction-5ea0.onrender.com/getTransactions/${customerID}`)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data); // Inspect the API response here
-    resultContainer.innerHTML = data.map((transaction, index) => `
-      <div class="resultContainerRow" data-id="${transaction.id}" onclick="toggleDetails(event)">
-        <div class="depositIcon">
-          ${index + 1} Deposit
-        </div>
-        <div class="containerRowDetails">
-          ${transaction.amount}€
-        </div>
-        <div class="transactionDetails">
-          <div class="transactionId">Transaction ID: ${transaction.transactionID }</div>
-  ${transaction.date ? new Date(transaction.date).toLocaleString('en-US', { 
-          dateStyle: 'medium', 
-          timeStyle: 'short' 
-        }) : 'N/A'}        </div>
-      </div>
-    `).join('');
-  })
-  .catch(error => {
-    console.error('Error loading transactions:', error);
-    alert(error.message);
-  });
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(errorData => {
+          throw new Error(errorData.message || 'Failed to fetch transactions');
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Validate if the data is an array
+      if (Array.isArray(data)) {
+        resultContainer.innerHTML = data.map((transaction, index) => `
+          <div class="resultContainerRow" data-id="${transaction.id}" onclick="toggleDetails(event)">
+            <div class="depositIcon">
+              ${index + 1} Deposit
+            </div>
+            <div class="containerRowDetails">
+              ${transaction.amount}€
+            </div>
+            <div class="transactionDetails">
+              <div class="transactionId">Transaction ID: ${transaction.transactionID}</div>
+              ${transaction.date ? new Date(transaction.date).toLocaleString('en-US', { 
+                dateStyle: 'medium', 
+                timeStyle: 'short' 
+              }) : 'N/A'}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        // Handle unexpected data format
+        throw new Error('Unexpected data format received from the server.');
+      }
+    })
+    .catch(error => {
+      console.error('Error loading transactions:', error);
+      alert(error.message);
+    });
 });
+
 // Function to add a transaction
 addTransactionForm.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -70,6 +84,8 @@ addTransactionForm.addEventListener('submit', (event) => {
   .then(data => alert(data.message))
   .catch(error => console.error('Error:', error));
 });
+
+
 
 // Search for a customer (not expanded)
 searchForCustomerForm.addEventListener('submit', (event) => {
