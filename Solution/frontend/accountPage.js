@@ -11,7 +11,7 @@ searchForCustomerForm.addEventListener('submit', (event) => {
  // Get the value from the customerID input field
  const customerID = document.getElementById('searchCustomerID').value;
 
- fetch(`http://localhost:3001/account/getAccount/${customerID}`)
+ fetch(`https://hosted-back-end-assignment-7.onrender.com/account/getAccount/${customerID}`)
   .then(response => {
     if (!response.ok) {
       // If the response is not OK, throw an error
@@ -86,7 +86,7 @@ addCustomerForm.addEventListener('submit', (event) => {
       surname: surname,
   };
 
-  fetch('http://localhost:3001/account/createAccount', {
+  fetch('https://hosted-back-end-assignment-7.onrender.com/account/createAccount', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestData)

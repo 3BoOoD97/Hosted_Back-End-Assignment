@@ -6,11 +6,9 @@ const labelBalance = document.querySelector('.balanceValue');
 const resultContainer = document.querySelector('.resultContainer');
 const searchTransactionForm = document.getElementById('searchTransactionForm');
 const searchForCustomerForm = document.getElementById('searchForCustomerForm');
+const addTransactionForm = document.getElementById('addTransactionForm');
 
-
-
-
-//Once the user clicks on Search For Transactions button this function will be called
+// Once the user clicks on Search For Transactions button this function will be called
 searchTransactionForm.addEventListener('submit', (event) => {
   // Prevent the form from submitting and refreshing the page
   event.preventDefault();
@@ -20,19 +18,16 @@ searchTransactionForm.addEventListener('submit', (event) => {
   const customerID = document.getElementById('searchCustomerID').value;
 
   // Fetch the transactions for the given customer ID
-  fetch(`http://localhost:3002/getTransactions/${customerID}`)
+  fetch(`https://hosted-back-end-assignment.onrender.com/getTransactions/${customerID}`)
     .then(response => {
       if (!response.ok) {
-        // If the response is not OK, throw an error
         return response.text().then(text => {
           throw new Error(text);
         });
       }
-      // If the response is OK, parse it as JSON
       return response.json();
     })
     .then(data => {
-      // Assuming resultContainer is a defined element
       resultContainer.innerHTML = data.map((transaction, index) => `
         <div class="resultContainerRow">
           <div class="depositIcon">
@@ -46,67 +41,51 @@ searchTransactionForm.addEventListener('submit', (event) => {
     })
     .catch(error => {
       console.error('Error loading transactions:', error);
-      // Display the error message to the user
       alert(error.message);
     });
 });
 
-
-//Once the user clicks on Add Transaction button this function will be called
+// Function to add a transaction
 addTransactionForm.addEventListener('submit', (event) => {
- // Prevent the form from submitting and refreshing the page
- event.preventDefault();
+  event.preventDefault();
 
- // get the values from the fields in the addTransactionForm
- const customerID = document.getElementById('addCustomerID').value;
- const amount = Number(document.getElementById('amount').value);
+  const customerID = document.getElementById('addCustomerID').value;
+  const amount = Number(document.getElementById('amount').value);
 
+  const requestData = {
+    customerID: customerID,
+    amount: amount
+  };
 
- const requestData = {
-     customerID: customerID,
-     amount: amount
-   };
-   // Just to check the requestData object
-   console.log(requestData);
-
-     // Send a POST request to the transactionService server
-   fetch('http://localhost:3002/addTransaction', {
-     method: 'POST',
-     headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify(requestData)
-   })
-   // If the request is successful, alert the response data
-   .then(response => response.text()) 
-   .then(data => alert(data))
-     // If the request is unsuccessful, log the error
-   .catch(error => console.error('Error:', error)); 
+  fetch('https://hosted-back-end-assignment.onrender.com/addTransaction', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(requestData)
+  })
+  .then(response => response.json())
+  .then(data => alert(data.message))
+  .catch(error => console.error('Error:', error));
 });
 
-
-
-//Once the user clicks on Search For Customer button this function will be called
+// Once the user clicks on Search For Customer button this function will be called
 searchForCustomerForm.addEventListener('submit', (event) => {
-  // Prevent the form from submitting and refreshing the page
   event.preventDefault();
-  // Clear the resultContainer
   resultContainer.innerHTML = '';
-  // Get the value from the customerID input field
   const customerID = document.getElementById('searchCustomerID').value;
 
-  // Fetch the transactions for the given customer ID
   fetch(`http://localhost:3001/account/getAccount/${customerID}`)
-      .then(response => {
+    .then(response => {
       if (!response.ok) {
-        // If the response is not OK, throw an error
         return response.text().then(text => {
           throw new Error(text);
         });
       }
-      // If the response is OK, parse it as JSON
       return response.json();
     })
     .then(data => {
-      // Assuming resultContainer is a defined element
       resultContainer.innerHTML = data.map((transaction, index) => `
         <div class="resultContainerRow">
           <div class="depositIcon">
@@ -120,10 +99,6 @@ searchForCustomerForm.addEventListener('submit', (event) => {
     })
     .catch(error => {
       console.error('Error loading transactions:', error);
-      // Display the error message to the user
       alert(error.message);
     });
 });
- 
-
-
