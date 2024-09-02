@@ -2,49 +2,44 @@ const searchForCustomerForm = document.getElementById('searchForCustomerForm');
 const addCustomerForm = document.getElementById('addCustomerForm');
 const customersContainer = document.getElementById('customersContainer');
 
-
-
 searchForCustomerForm.addEventListener('submit', (event) => {
- // Prevent the form from submitting and refreshing the page
- event.preventDefault();
- customersContainer.innerHTML = '';
- // Get the value from the customerID input field
- const customerID = document.getElementById('searchCustomerID').value;
+  event.preventDefault();
+  customersContainer.innerHTML = '';
+  const customerID = document.getElementById('searchCustomerID').value;
 
- fetch(`https://hosted-back-end-assignment-7.onrender.com/account/getAccount/${customerID}`)
-  .then(response => {
-    if (!response.ok) {
-      // If the response is not OK, throw an error
-      return response.text().then(text => {
-        throw new Error(text);
-      });
-    }
-    // If the response is OK, parse it as JSON
-    return response.json();
-  })
-  .then(data => {
-    // Assuming customersContainer is a defined element
-    customersContainer.innerHTML = `
-      <div class="resultContainerRow">
-         <div class="userIcon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14s-1 0-1-1 1-4 7-4 7 3 7 4-1 1-1 1H2z"/>
-        </svg>
-    </div>
-        <div class="containerRowDetails">
-          ${data.id}, ${data.name}, ${data.surname}
+  fetch(`https://hosted-back-end-assignment-7.onrender.com/account/getAccount/${customerID}`)
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(text => {
+          throw new Error(text);
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Generate the HTML for customer details and transaction count
+      customersContainer.innerHTML = `
+        <div class="customerDetails">
+          <div class="userIcon">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 14s-1 0-1-1 1-4 7-4 7 3 7 4-1 1-1 1H2z"/>
+            </svg>
+          </div>
+          <div class="customerInfo">
+            <div class="customerID">ID: ${data.id}</div>
+            <div class="customerName">Name: ${data.name}</div>
+            <div class="customerSurname">Surname: ${data.surname}</div>
+            <div class="customerBalance">Balance: ${data.balance}€</div>
+            <div class="transactionCount">Transactions: ${data.transactions.length} transactions</div>
+          </div>
         </div>
-      </div>
-    `;
-    console.log(data);
-  })
-
-  .catch(error => {
-    console.error('Error loading account:', error);
-    // Display the error message to the user
-    alert(error.message);
-  });
-} );
+      `;
+    })
+    .catch(error => {
+      console.error('Error loading account:', error);
+      alert(error.message);
+    });
+});
 
 
 // Function to validate input
