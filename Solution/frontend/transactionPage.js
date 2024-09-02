@@ -18,7 +18,7 @@ searchTransactionForm.addEventListener('submit', (event) => {
   const customerID = document.getElementById('searchCustomerID').value;
 
   // Fetch the transactions for the given customer ID
-  fetch(`https://hosted-back-end-assignment.onrender.com/getTransactions/${customerID}`)
+  fetch(`https://transaction-5ea0.onrender.com/getTransactions/${customerID}`)
     .then(response => {
       if (!response.ok) {
         return response.text().then(text => {
@@ -57,7 +57,7 @@ addTransactionForm.addEventListener('submit', (event) => {
     amount: amount
   };
 
-  fetch('https://hosted-back-end-assignment.onrender.com/addTransaction', {
+  fetch('https://transaction-5ea0.onrender.com/addTransaction', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ searchForCustomerForm.addEventListener('submit', (event) => {
   resultContainer.innerHTML = '';
   const customerID = document.getElementById('searchCustomerID').value;
 
-  fetch(`http://localhost:3001/account/getAccount/${customerID}`)
+  fetch(`https://hosted-back-end-assignment-7.onrender.com/account/getAccount/${customerID}`)
     .then(response => {
       if (!response.ok) {
         return response.text().then(text => {
