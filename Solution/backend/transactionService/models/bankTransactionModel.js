@@ -28,7 +28,7 @@ class BankTransactionModel {
             };
         
             // Add the new transaction to the customer account
-            await axios.post(`http://localhost:3001/account/addTransactions/${customerID}`, {
+            await axios.post(`https://hosted-back-end-assignment-7.onrender.com/account/addTransactions/${customerID}`, {
                 transactions: [{"transactionID": transactionData.transactionID,
                                 "transactionData": transactionData.transactionData,
                                 "amount": transactionData.amount,
