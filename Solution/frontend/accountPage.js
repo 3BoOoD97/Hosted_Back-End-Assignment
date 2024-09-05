@@ -2,6 +2,40 @@ const searchForCustomerForm = document.getElementById('searchForCustomerForm');
 const addCustomerForm = document.getElementById('addCustomerForm');
 const customersContainer = document.getElementById('customersContainer');
 
+
+
+
+
+
+// Add Customer Form Submission
+addCustomerForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const customerID = document.getElementById('addCustomerID').value;
+  const name = customerFirstName.value;
+  const surname = customerSurName.value;
+
+  // Send the request to create a new account
+  const requestData = {
+      customerID: customerID,
+      name: name,
+      surname: surname,
+  };
+
+  fetch('https://hosted-back-end-assignment-7.onrender.com/account/createAccount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestData)
+  })
+  .then(response => response.text())
+  .then(data => alert(data))
+  .catch(error => console.error('Error:', error));
+});
+
+
+
+
+// searchForCustomer Form Submission
 searchForCustomerForm.addEventListener('submit', (event) => {
   event.preventDefault();
   customersContainer.innerHTML = '';
@@ -42,11 +76,6 @@ searchForCustomerForm.addEventListener('submit', (event) => {
 });
 
 
-// Function to validate input
-function validateNameInput(input) {
-  const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
-  return regex.test(input);
-}
 
 // Add event listeners to validate input
 customerFirstName.addEventListener('input', () => {
@@ -59,34 +88,4 @@ customerSurName.addEventListener('input', () => {
   if (!validateNameInput(customerSurName.value)) {
       customerSurName.value = customerSurName.value.replace(/[^a-zA-Z\s]/g, '');
   }
-});
-
-// Add Customer Form Submission
-addCustomerForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const customerID = document.getElementById('addCustomerID').value;
-  const name = customerFirstName.value;
-  const surname = customerSurName.value;
-
-  // Additional validation before submitting
-  if (!validateNameInput(name) || !validateNameInput(surname)) {
-      alert('Name and Surname should contain only letters.');
-      return;
-  }
-
-  const requestData = {
-      customerID: customerID,
-      name: name,
-      surname: surname,
-  };
-
-  fetch('https://hosted-back-end-assignment-7.onrender.com/account/createAccount', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-  })
-  .then(response => response.text())
-  .then(data => alert(data))
-  .catch(error => console.error('Error:', error));
 });

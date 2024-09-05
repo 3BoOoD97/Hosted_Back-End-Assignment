@@ -12,11 +12,12 @@ exports.createAccount = async (req, res) => {
 
        
     try {
+        // Check if the account already exists
         const existingAccount = await BankAccountsModel.getAccount(customerID);
         if (existingAccount) {
             return res.status(400).send('Account already exists!');
         }
-        console.log('Creating account:', customerID, name, surname);
+        // Create the account
         await BankAccountsModel.createAccount(customerID, name, surname);
         res.status(200).send('Account created successfully!');
     } catch (error) {
@@ -42,6 +43,8 @@ exports.getAccount = async (req, res) => {
     }
 };
 
+
+// Export the addTransactionsToAccount function
 exports.addTransactionsToAccount = async (req, res) => {
     try {
         // Extract the customerID and transactions from the request

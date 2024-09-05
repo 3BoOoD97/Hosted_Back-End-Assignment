@@ -38,6 +38,7 @@ class BankTransactionModel {
             });
 
             console.log("Transaction added and account updated successfully.");
+            
               // Add transaction to the transactions collection
               await addDoc(transactionsRef, transactionData);
 
